@@ -1,0 +1,98 @@
+Binary Search Trees Notes
+
+Binary Search Tree is based off of the idea of a linked list but it's nodes have two next pointers
+The root pointer is the same thing as the head pointer
+Nodes are called children now
+The first next pointer points to the left-Child and the second next pointer points the the right-Child
+Two children with the same parent node are called siblings
+root has no parent just the root pointer that points to it
+a node is called a leaf if it has no children, once it has a child it is no longer called a leaf but is called a parent
+
+THE HEIGHT OF A TREE HAS TO DO WITH HOW MANY EDGES THERE ARE
+TO CALCULATE HEIGHT IS PRETTY EASY
+IF CHILDREN ARE EMPTY GIVE -1
+WHAT EVER THE HEIGHT OF THE CHILD ADD 1 TO IT, THIS WORKS FOR LEAVES TOO
+
+left sub tree should be less than or equal to the root
+right sub tree should be greater than the root
+so left-sub tree <= root < right-sub tree
+
+BST Rules
+insertion is always done at a leaf node
+
+
+---------------------------------------------------------------------------------------------------------------------------
+SECOND BINARY SEARCH TREE PROJECT
+
+When one trees branches are much longer than the other branch then we consider it out of balance.
+So we want to balance the tree. It only takes about 40 lines but they are tough lines of code. If you understand it though its not hard
+
+To balance a tree you rotate it. You know when to rotate based on the BALANCE FACTOR. BALANCE FACTOR IS NOT HEIGHT BUT IT IS RELATED TO HEIGHT
+BALANCE FACTOR = leftChild->height - rightChild->height
+if they are both -1 the answer is 0
+when BALANCE FACTOR IS -1 OR 1 its okay 
+once we get a -2 we need to rotate left if we get a 2 we need to rotate right
+Once you rotate remember to update height as well
+
+Sometimes you need to do a double rotation. The key is knowing when to use which rotation
+the four cases are 
+
+
+when roots balance factor of -2
+and when the roots right child is negative
+right right then	rotate left
+	-rotate left is done this way: 
+
+	Node* cursor = root;
+	Node* tmp = nullptr;
+	assert(cursor != nullprt); //if this is false this will crash the program. Because this is bad
+	tmp = cursor->right;
+	assert(tmp != nullptr);
+	cursor->right = tmp->left;	//if the leftChild of the new root has a left node we use this line of code
+	tmp->left = cursor; 
+	cursor->UpdateHeight();	//because techniqually cursor is still pointing to the old root which is now a child of the new root you start here to update it all properly
+	tmp->UpdateHeight();	// now we update the new roots height
+	return tmp; // then you where ever this function was called can now be equal to what we are returning which needs to be root
+
+when returned cursor = RotateLeft(cursor);
+
+when the roots right child is positive
+right left then		rotate right on child then rotate left on root
+	-done this way
+
+		cursor-right = RostateRight(cursor->right);
+		cursor = RostateLeft(cursor);
+
+
+when root balance factor of 2
+left right			rotate left on child then rotate right on root
+	done this way
+
+	cursor->left = RotateLeft(cursor->left);
+	cursor = RotateRight(cursor);
+
+left left then		rotate right
+	-rotate right is done this way (similar to rotate left, look at comments on that one to understand more)
+
+	Node* cursor = root;
+	Node* tmp = nullptr;
+	assert(cursor != nullptr);
+	tmp = cursor->left;
+	assert(tmp != nullptr);
+	cursor->left = tmp->right;
+	tmp->right = cursor;
+	cursor->UpdateHeight();
+	tmp->UpdateHeight();
+	return tmp;
+		 
+when returned cursor = RotateRight(cursor);
+this is how we maintain BigO of logn
+
+/////CODE\\\\\\\
+So write a balance factor function!!!
+Write a rotate function that checks your balance factor to know when to rotate
+on rotate left it will have like 10 lines
+rotate right is like 10 lines of code
+
+Whereever in the program I updated height check if we we need to rebalance so that is only in remove and insert and 
+remove isn't even tested.
